@@ -19,6 +19,6 @@ public class BookController {
 
     @GetMapping("/list")
     public ResponseCode findAll(Integer pagenum,Integer pagesize){
-        return ResponseCode.success(bookService.findAll(pagenum,pagesize).toPageInfo());
+        return ResponseCode.success(bookService.findAll(pagenum,pagesize));
     }
 }
