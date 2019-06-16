@@ -5,6 +5,9 @@ import com.github.pagehelper.PageInfo;
 import top.swiftr.book_shop.common.BaseService;
 import top.swiftr.book_shop.entity.Book;
 
+import java.util.List;
+
 public interface BookService extends BaseService<Book> {
     public PageInfo<Book> findAll(Integer pagenum, Integer pagesize);
+    public List<Book> findByRand();
 }
