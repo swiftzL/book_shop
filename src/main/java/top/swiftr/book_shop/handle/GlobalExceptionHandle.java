@@ -9,8 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 import top.swiftr.book_shop.enums.StatusEnum;
 import top.swiftr.book_shop.exception.GlobalException;
 import top.swiftr.book_shop.vo.ResponseCode;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
