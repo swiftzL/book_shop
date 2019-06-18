@@ -21,4 +21,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         return !userMapper.selectByExample(example).isEmpty();
 
     }
+
+    @Override
+    public User findByUsername(String username) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("username",username);
+        return userMapper.selectOneByExample(example);
+    }
 }

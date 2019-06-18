@@ -5,5 +5,6 @@ import top.swiftr.book_shop.entity.User;
 
 public interface UserService extends BaseService<User> {
     public Boolean isExist(String username);
+    public User findByUsername(String username);
 
 }

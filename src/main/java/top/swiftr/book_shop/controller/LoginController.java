@@ -98,9 +98,19 @@ public class LoginController {
             request.getSession().setAttribute("gifCode","fsadfasdfasdfas");
             return new ResponseCode(StatusEnum.CODE_ERROR);
         }
+        request.getSession().setAttribute("gifCode","fsadfasdfasdfas");
 
+        if (!userService.isExist(user.getUsername())) {
+            return new ResponseCode(StatusEnum.ACCOUNT_ERROR);
+        }
+        User userDate = userService.findByUsername(user.getUsername());
 
-        return null;
+        if (!userDate.getPassword().equals(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()))){
+            return new ResponseCode(StatusEnum.ACCOUNT_ERROR);
+        }
+        //这里生成jsonwebtoken
+        userDate.setPassword("");
+        return  ResponseCode.success(userDate);
     }
 
     @GetMapping("/getCode")
