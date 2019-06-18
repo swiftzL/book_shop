@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import top.swiftr.book_shop.common.BaseService;
 import top.swiftr.book_shop.entity.Book;
+import top.swiftr.book_shop.redisVo.BookPage;
 
 import java.util.List;
 
@@ -20,9 +21,17 @@ public interface BookService extends BaseService<Book> {
 
     /**
      *缓存书籍 如果tid为null则缓存所有
-     * @param tid
+     * @param bookPage
      */
-    public void cacheBook(Integer tid,PageInfo<Book> books);
+    public void cacheBook(BookPage bookPage, PageInfo<Book> books);
+
+    /**
+     * 获取缓存中的page信息
+     * @param bookPage
+     * @return
+     */
+    public PageInfo<Book> getByBookPage(BookPage bookPage);
+
 
 
 }

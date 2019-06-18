@@ -12,7 +12,10 @@ import tk.mybatis.mapper.entity.Example.Criteria;
 import top.swiftr.book_shop.common.impl.BaseServiceImpl;
 import top.swiftr.book_shop.entity.Book;
 import top.swiftr.book_shop.mapper.BookMapper;
+import top.swiftr.book_shop.redisVo.BookPage;
+import top.swiftr.book_shop.redisVo.RedisObj;
 import top.swiftr.book_shop.service.BookService;
+import top.swiftr.book_shop.utils.RedisService;
 
 import java.util.List;
 
@@ -23,6 +26,9 @@ public class BookServiceImpl extends BaseServiceImpl<Book> implements BookServic
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    private RedisService redisService;
 
     @Override
     public PageInfo<Book> findAll(Integer pagenum, Integer pagesize) {
@@ -53,12 +59,17 @@ public class BookServiceImpl extends BaseServiceImpl<Book> implements BookServic
     }
 
     @Override
-    public void cacheBook(Integer tid,PageInfo<Book> books) {
-        if (tid == null){
-            redisTemplate.opsForValue().set("tid:0",books);
-            return;
+    public void cacheBook(BookPage bookPage, PageInfo<Book> books) {
+        redisService.setObj(new RedisObj(bookPage,books));
+    }
+
+    @Override
+    public PageInfo<Book> getByBookPage(BookPage bookPage) {
+        RedisObj<PageInfo> pageInfoRedisObj =  redisService.findBykey(bookPage);
+        if (pageInfoRedisObj == null){
+            return null;
         }
-        redisTemplate.opsForValue().set("tid:"+tid.toString(),books);
+        return pageInfoRedisObj.getT();
     }
 
 

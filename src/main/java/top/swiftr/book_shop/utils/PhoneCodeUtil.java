@@ -46,6 +46,6 @@ public class PhoneCodeUtil {
             System.out.println(e);
            return ResponseCode.error();
         }
-        return ResponseCode.success();
+        return new ResponseCode(200,"发送成功");
     }
 }

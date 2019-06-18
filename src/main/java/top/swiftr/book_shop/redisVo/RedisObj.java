@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class RedisObj<T> {
 
-    private String key;
+    private Object key;
     private T t;
 }
