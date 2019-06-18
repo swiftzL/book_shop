@@ -30,7 +30,7 @@ public class GlobalExceptionHandle {
     public ResponseCode globalExceptionHandle(GlobalException e, HttpServletResponse response) {
         e.printStackTrace();
         log.error(e.getMsg());
-        return new ResponseCode(response.getStatus(), e.getMsg());
+        return ResponseCode.error();
     }
 
 }

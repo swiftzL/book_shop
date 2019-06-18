@@ -17,7 +17,7 @@ public class BookServiceImplTest {
     private BookService bookService;
     @Test
     public void testFindAll(){
-        System.out.println(bookService.findAll(10, 1));
+        System.out.println(bookService.findByTid(2,1,2));
 
     }
 

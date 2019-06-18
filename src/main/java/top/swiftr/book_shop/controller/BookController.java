@@ -2,6 +2,7 @@ package top.swiftr.book_shop.controller;
 
 
 import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.swiftr.book_shop.entity.Book;
 import top.swiftr.book_shop.exception.GlobalException;
+import top.swiftr.book_shop.redisVo.RedisObj;
 import top.swiftr.book_shop.service.BookService;
+import top.swiftr.book_shop.utils.RedisService;
 import top.swiftr.book_shop.vo.ResponseCode;
 
 @Api(value = "图书",description = "图书api")
@@ -20,6 +23,9 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private RedisService redisService;
 
     @ApiOperation(value = "图书列表",
             notes = "查找所有图书并分页",
@@ -75,8 +81,36 @@ public class BookController {
 
     @GetMapping("/findById")
     public ResponseCode findById(String bid){
+        RedisObj<Book> bookRedisObj = redisService.findBykey("bid");
+        if (bookRedisObj != null) {
+            return ResponseCode.success(bookRedisObj.getT());
+        }
         try{
-            return ResponseCode.success(bookService.selectByKey(bid));
+            Book book = bookService.selectByKey(bid);
+            redisService.setObj(new RedisObj(bid,book));
+            return ResponseCode.success();
+        }catch (Exception e){
+            throw new GlobalException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/findByTid")
+    public ResponseCode findByTid(Integer tid,Integer pagenum,Integer pagesize){
+        RedisObj<Page> redisObj = redisService.findBykey("tid:"+tid.toString());
+        if (redisObj.getT() != null){
+            return ResponseCode.success(redisObj.getT());
+        }
+        try {
+            if (tid == 0){
+                System.out.println("lzl");
+                PageInfo<Book> bookPageInfo = bookService.findAll(pagenum, pagesize);
+                bookService.cacheBook(null,bookPageInfo);
+                return ResponseCode.success(bookPageInfo);
+
+            }
+            PageInfo<Book> bookPageInfo = bookService.findByTid(tid, pagenum, pagesize);
+            bookService.cacheBook(tid,bookPageInfo);
+            return ResponseCode.success(bookPageInfo);
         }catch (Exception e){
             throw new GlobalException(e.getMessage());
         }
