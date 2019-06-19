@@ -143,7 +143,12 @@
             <artifactId>java-jwt</artifactId>
             <version>3.4.0</version>
         </dependency>
-
+        <!--阿里sdk-->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

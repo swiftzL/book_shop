@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 import top.swiftr.book_shop.enums.StatusEnum;
+import top.swiftr.book_shop.exception.AuthException;
 import top.swiftr.book_shop.exception.GlobalException;
 import top.swiftr.book_shop.vo.ResponseCode;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,11 @@ public class GlobalExceptionHandle {
         log.error(e.getMessage());
         e.printStackTrace();
         return ResponseCode.error();
+    }
+    @ExceptionHandler(value = AuthException.class)
+    public ResponseCode authException(AuthException e){
+        log.info(e.getMsg());
+        return new ResponseCode(403,e.getMsg());
     }
 
     @ExceptionHandler(value = GlobalException.class)

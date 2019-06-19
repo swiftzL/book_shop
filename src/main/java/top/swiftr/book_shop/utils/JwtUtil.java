@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import top.swiftr.book_shop.enums.Identity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class JwtUtil {
      * @param userId
      * @return
      */
-    public static String createJwttoken(Long userId){
+    public static String createJwttoken(String userId, Identity ident){
         Calendar calendar = Calendar.getInstance();
         calendar.add(calendarField,calendarInterval);
         Date expiressDate = calendar.getTime();
@@ -33,7 +34,8 @@ public class JwtUtil {
         map.put("typ", "JWT");
 
         String token = JWT.create().withHeader(map)
-                .withClaim("user_id", null == userId ? null : userId.toString())
+                .withClaim("username", null == userId ? null : userId.toString())
+                .withClaim("identity",ident.getInfo())
                 .withIssuedAt(new Date())
                 .withExpiresAt(expiressDate)
                 .sign(Algorithm.HMAC256(SECRET));
@@ -60,7 +62,7 @@ public class JwtUtil {
     }
 
     public static Boolean verifyToken(String token){
-        return parseJWT(token).get("user_id").asString().equals("") ? false : true;
+        return parseJWT(token).get("username").asString().equals("") ? false : true;
     }
 
 
