@@ -20,10 +20,11 @@ public class BaseController  {
      * @param hours
      * @param identity
      */
-    public void setJwt(String username, Integer hours, Identity identity){
+    public String setJwt(String username, Integer hours, Identity identity){
         String token = JwtUtil.createJwttoken(username,identity);
         RedisObj<String> redisObj = new RedisObj<>(token,username);
         redisService.setObjByhours(redisObj,hours);
+        return token;
     }
 
     /**

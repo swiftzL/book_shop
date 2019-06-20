@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.swiftr.book_shop.annotation.CheckToken;
 import top.swiftr.book_shop.annotation.Log;
+import top.swiftr.book_shop.common.BaseController;
 import top.swiftr.book_shop.entity.User;
 import top.swiftr.book_shop.enums.Identity;
 import top.swiftr.book_shop.enums.StatusEnum;
@@ -43,7 +44,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/user")
 @Slf4j
-public class LoginController {
+public class LoginController extends BaseController {
 
     @Autowired
     private UserService userService;
@@ -93,7 +94,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseCode login(User user,String code,HttpServletRequest request){
+    public ResponseCode login(User user,String code,HttpServletRequest request,HttpServletResponse response){
         //校验图形验证码
         if (!request.getSession().getAttribute("gifCode").equals(code)) {
             //todo 更新验证码
@@ -111,7 +112,9 @@ public class LoginController {
             return new ResponseCode(StatusEnum.ACCOUNT_ERROR);
         }
         //这里生成jsonwebtoken
-        userDate.setPassword("");
+        String token = super.setJwt(user.getUsername(),6,Identity.User);
+        response.addHeader("Access-Control-Expose-Headers", "jwt");
+        response.setHeader("jwt",token);
         return  ResponseCode.success(userDate);
     }
 

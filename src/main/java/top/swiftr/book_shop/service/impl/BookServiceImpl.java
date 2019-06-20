@@ -72,5 +72,21 @@ public class BookServiceImpl extends BaseServiceImpl<Book> implements BookServic
         return pageInfoRedisObj.getT();
     }
 
+    @Override
+    public Book findByBookName(String bookname) {
+        Example example = new Example(Book.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("bookname",bookname);
+        return bookMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public Book findByBookName(Integer bid) {
+        Example example = new Example(Book.class);
+        Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("bid",bid);
+        return bookMapper.selectOneByExample(example);
+    }
+
 
 }

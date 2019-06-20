@@ -8,5 +8,4 @@ import top.swiftr.book_shop.service.CarService;
 @Service
 public class CarServiceImpl extends BaseServiceImpl<Car> implements CarService {
 
-
 }

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import top.swiftr.book_shop.annotation.CheckToken;
 import top.swiftr.book_shop.entity.Book;
 import top.swiftr.book_shop.exception.GlobalException;
 import top.swiftr.book_shop.redisVo.BookPage;
@@ -95,6 +96,7 @@ public class BookController {
         }
     }
 
+    @CheckToken("user")
     @GetMapping("/findByTid")
     public ResponseCode findByTid(Integer tid,Integer pagenum,Integer pagesize){
         BookPage bookPage = new BookPage(tid, pagenum, pagesize);
@@ -122,4 +124,19 @@ public class BookController {
             throw new GlobalException(e.getMessage());
         }
     }
+    @GetMapping("/findByBookname")
+    public ResponseCode findByBookname(String bookname){
+        //todo 后续加入缓存
+        try{
+            Book book = bookService.findByBookName(bookname);
+            if (book == null){
+                return ResponseCode.error();
+            }
+            return ResponseCode.success(book);
+        }catch (Exception e){
+            throw new GlobalException(e.getMessage());
+        }
+
+    }
+
 }

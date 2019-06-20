@@ -32,6 +32,20 @@ public interface BookService extends BaseService<Book> {
      */
     public PageInfo<Book> getByBookPage(BookPage bookPage);
 
+    /**
+     * 根据书名查对应Book对象
+     * @param bookname
+     * @return
+     */
+    public Book findByBookName(String bookname);
+
+    /**
+     * 根据书id查找Book对象
+     * @param bid
+     * @return
+     */
+    public Book findByBookName(Integer bid);
+
 
 
 }
