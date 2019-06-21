@@ -22,6 +22,7 @@ import top.swiftr.book_shop.vo.CarVo;
 import top.swiftr.book_shop.vo.ResponseCode;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,10 +92,12 @@ public class CarController {
         Example example = new Example(Car.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("uid", uid);
+        BigDecimal sum = new BigDecimal(0);
         try {
             List<Car> cars = carService.selectByExample(example);
             //拼接数据
             List<CarVo> carVos = new ArrayList<>();
+
             cars.forEach(e -> {
                 CarVo carVo = new CarVo();
                 Book book = bookService.selectByKey(e.getBid());
@@ -104,8 +107,10 @@ public class CarController {
                 carVo.setBookprice(book.getBookprice());
                 carVo.setCarid(e.getCid());
                 carVo.setBooktype(bookTypeService.selectByKey(book.getTid()).getTypename());
+                sum.add(book.getBookprice().multiply(new BigDecimal(e.getNumber().toString())));
                 carVos.add(carVo);
             });
+
             return ResponseCode.success(carVos);
         } catch (Exception e) {
             throw new GlobalException(e.getMessage());

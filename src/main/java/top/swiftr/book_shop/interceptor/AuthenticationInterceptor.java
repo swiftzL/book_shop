@@ -19,6 +19,7 @@ public class AuthenticationInterceptor extends BaseController implements Handler
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
+
         String token = request.getHeader("jwt");
         if (!(handler instanceof HandlerMethod)){
             return true;
