@@ -29,11 +29,11 @@ spring:
       #基本属性
       url: jdbc:mysql://119.23.25.226:3306/book?useUnicode=true&characterEncoding=UTF-8
       username: root
-      password: root@mylzl
+      password: 
 
 tengxun:
-  appid: 1400222097
-  appkey: fad3628ae9997cbf610de8f1b19894da
+  appid: 
+  appkey: 
 
 
 
